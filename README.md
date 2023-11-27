@@ -84,11 +84,11 @@ Untuk tahap evaluasi digunakan metrik confusion matrix yang cocok digunakan pada
 
 | Metric                   | Formula                                                   | Description                                      |
 |--------------------------|-----------------------------------------------------------|--------------------------------------------------|
-| **Accuracy**             | $$ \frac{TP + TN}{TP + FP + FN + TN} .$$                   | Tingkat kebenaran keseluruhan dari model.         |
-| **Precision**            | $$ \frac{TP}{TP + FP} .$$                                  | Proporsi identifikasi positif yang sebenarnya benar.|
-| **Recall (Sensitivity)** | $$ \frac{TP}{TP + FN} .$$                                  | Proporsi positif sebenarnya yang diidentifikasi dengan benar.|
-| **Specificity**          | $$ \frac{TN}{TN + FP} .$$                                  | Proporsi negatif sebenarnya yang diidentifikasi dengan benar.|
-| **F1 Score**             | $$ \frac{2 \cdot (Precision \cdot Recall)}{Precision + Recall} .$$ | Ukuran seimbang antara presisi dan recall.       |
+| **Accuracy**             | $$(\frac{TP + TN}{TP + FP + FN + TN}).$$                      | Tingkat kebenaran keseluruhan dari model.         |
+| **Precision**            | $$(\frac{TP}{TP + FP}) .$$                                  | Proporsi identifikasi positif yang sebenarnya benar.|
+| **Recall (Sensitivity)** | $$ (\frac{TP}{TP + FN}) .$$                                  | Proporsi positif sebenarnya yang diidentifikasi dengan benar.|
+| **Specificity**          | $$ (\frac{TN}{TN + FP}) .$$                                  | Proporsi negatif sebenarnya yang diidentifikasi dengan benar.|
+| **F1 Score**             | $$ (\frac{2 \cdot (Precision \cdot Recall)}{Precision + Recall}) .$$ | Ukuran seimbang antara presisi dan recall.       |
 
 
 Akurasi mengukur tingkat kebenaran keseluruhan dari model, sementara presisi menilai proporsi identifikasi positif yang sebenarnya benar. Recall mengindikasikan proporsi positif sebenarnya yang diidentifikasi dengan benar, dan spesifisitas mencerminkan proporsi negatif sebenarnya yang diidentifikasi secara akurat. Metrik-metrik ini memberikan gambaran komprehensif tentang performa sebuah pengklasifikasi dalam memahami seberapa baik model dapat membedakan antara kelas positif dan negatif.
