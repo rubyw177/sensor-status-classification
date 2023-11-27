@@ -76,9 +76,11 @@ Untuk tahap evaluasi digunakan metrik confusion matrix yang cocok digunakan pada
 - False Negative (FN): Jumlah instansi yang diprediksi sebagai negatif padahal sebenarnya positif.
 - True Negative (TN): Jumlah instansi yang diprediksi dengan benar sebagai negatif.
 
-             Actual Positive     Actual Negative
-Predicted Positive    TP (True Positive)    FP (False Positive)
-Predicted Negative    FN (False Negative)   TN (True Negative)
+|                    | Actual Positive               | Actual Negative               |
+|--------------------|-------------------------------|-------------------------------|
+| Predicted Positive | TP (True Positive)            | FP (False Positive)           |
+| Predicted Negative | FN (False Negative)           | TN (True Negative)            |
+
 
 - Accuracy: (TP + TN) / (TP + FP + FN + TN)
 - Precision: TP / (TP + FP)
