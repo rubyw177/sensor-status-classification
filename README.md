@@ -35,11 +35,11 @@ Data yang digunakan adalah data dari nilai raw oleh 52 sensor pada sistem pompa 
 ### Exploratory Analysis
 Pada dataset terdapat banyak missing values pada kolom sensor dan terdapat satu kolom sensor yang bernilai nol pada setiap barisnya, dan masih banyak lagi hal-hal yang harus dibersihkan seperti:
 - Mendrop kolom yang tidak bergitu relevan dalam proses prediksi, kolom-kolom tersebut dapat dilihat dengan correlation matrix di bawah
-![correlation matrix](images/corr_matrix_zoomed.png)
+![correlation matrix](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/corr_matrix_zoomed.png)
 - Melakukan pengisian missing values dengan forward fill
 - Melakukan one hot encoding untuk keperluan training 
 - Melihat distribusi data pada label
-![grafik label](images/labels.png)
+![grafik label](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/labels.png)
 Pada grafik tersebut dapat terlihat data untuk label NORMAL sangatlah banyak dan perlu dilakukan preprocessing agar distribusi antar label setara.
 
 ## Data Preparation
@@ -82,20 +82,23 @@ Untuk tahap evaluasi digunakan metrik confusion matrix yang cocok digunakan pada
 | Predicted Negative | FN (False Negative)           | TN (True Negative)            |
 
 
-- Accuracy: (TP + TN) / (TP + FP + FN + TN)
-- Precision: TP / (TP + FP)
-- Recall (Sensitivity or True Positive Rate): TP / (TP + FN)
-- Specificity (True Negative Rate): TN / (TN + FP)
-- F1 Score: 2 * (Precision * Recall) / (Precision + Recall)
+| Metric                   | Formula                                                 | Description                                      |
+|--------------------------|---------------------------------------------------------|--------------------------------------------------|
+| **Accuracy**             | \( \frac{TP + TN}{TP + FP + FN + TN} \)                 | Tingkat kebenaran keseluruhan dari model.         |
+| **Precision**            | \( \frac{TP}{TP + FP} \)                                | Proporsi identifikasi positif yang sebenarnya benar.|
+| **Recall (Sensitivity)** | \( \frac{TP}{TP + FN} \)                                | Proporsi positif sebenarnya yang diidentifikasi dengan benar.|
+| **Specificity**          | \( \frac{TN}{TN + FP} \)                                | Proporsi negatif sebenarnya yang diidentifikasi dengan benar.|
+| **F1 Score**             | \( \frac{2 \cdot (Precision \cdot Recall)}{Precision + Recall} \) | Ukuran seimbang antara presisi dan recall.       |
+
 
 Akurasi mengukur tingkat kebenaran keseluruhan dari model, sementara presisi menilai proporsi identifikasi positif yang sebenarnya benar. Recall mengindikasikan proporsi positif sebenarnya yang diidentifikasi dengan benar, dan spesifisitas mencerminkan proporsi negatif sebenarnya yang diidentifikasi secara akurat. Metrik-metrik ini memberikan gambaran komprehensif tentang performa sebuah pengklasifikasi dalam memahami seberapa baik model dapat membedakan antara kelas positif dan negatif.
 
 Hasil dari metrik ini menunjukkan model Random Forest memiliki False Positive dan False Negative yang lebih kecil dibandingkan dengan model XGBoost.
 
-![rf](images/conf_matrix2.png)
+![conf_matrix2](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/conf_matrix2.png)
 Correlation matrix model Random Forest.
 
-![rf](images/conf_matrix.png)
+![rf](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/conf_matrix.png)
 Correlation matrix model XGBoost.
 
 ## Conclusion
