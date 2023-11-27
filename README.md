@@ -78,6 +78,7 @@ Beginilah distribusi dari label pada dataset
 | NORMAL      | 205836 | 93.4256%       |
 | RECOVERING  | 14477  | 6.5700%        |
 | BROKEN      | 7      | 0.0031%        |
+
 Dapat dilihat distribusi dataset paling banyak adalah machine dengan status NORMAL. Untuk menyetarakan distribusinya, kita perlu melakukan proses oversampling pada status RECOVERING dan BROKEN. Kita tidak melakukan undersampling agar tidak mengurangi jumlah data yang ada, menurut saya undersampling baik digunakan apabila baris pada dataset berjumlah sekitar satu juta.
 
 Dengan teknik PCA, standarisasi, dan oversampling, didapatkan dataframe akhir seperti ini.
