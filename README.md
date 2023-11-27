@@ -18,12 +18,11 @@ Untuk menjawab pertanyaan di atas, diperlukan goals sebagai berikut.
 - Melakukan analisis korelasi pada sensor terhadap dengan status sistem.
 - Membandingkan model SVM, Random Forest, dan XGBoost.
 
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Menambahkan bagian “Solution Statement” yang menguraikan cara untuk meraih goals. Bagian ini dibuat dengan ketentuan sebagai berikut: 
-
     ### Solution statements
-    - Mengajukan 2 atau lebih solution statement. Misalnya, menggunakan dua atau lebih algoritma untuk mencapai solusi yang diinginkan atau melakukan improvement pada baseline model dengan hyperparameter tuning.
-    - Solusi yang diberikan harus dapat terukur dengan metrik evaluasi.
+    - Menggunakan dua model klasifikasi yaitu dengan menggunakan: 
+        - Random Forest Classifier yang merupakan model ensemble dari decision trees yang ditrain secara paralel dan outputnya didapat melalui voting.
+        - XGBoost yang merupakan model gradient boosting yang secara sekuensial membuat decision trees yang setiap treenya memperbaiki kesalahan   tree sebelumnya.
+    - Menggunakan metrik seperti Confusion matrix pada test dataset, confusion matrix biasanya digunakan untuk metrik dari data yang memiliki multiclass label 
 
 ## Data Understanding
 Data yang digunakan adalah data dari nilai raw oleh 52 sensor pada sistem pompa air di suatu kota kecil. [Pump Sensor Data](https://www.kaggle.com/datasets/nphantawee/pump-sensor-data/data).
