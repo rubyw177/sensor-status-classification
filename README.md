@@ -90,11 +90,15 @@ Untuk tahap evaluasi digunakan metrik confusion matrix yang cocok digunakan pada
 
 Akurasi mengukur tingkat kebenaran keseluruhan dari model, sementara presisi menilai proporsi identifikasi positif yang sebenarnya benar. Recall mengindikasikan proporsi positif sebenarnya yang diidentifikasi dengan benar, dan spesifisitas mencerminkan proporsi negatif sebenarnya yang diidentifikasi secara akurat. Metrik-metrik ini memberikan gambaran komprehensif tentang performa sebuah pengklasifikasi dalam memahami seberapa baik model dapat membedakan antara kelas positif dan negatif.
 
-Hasil dari metrik ini menunjukkan model Random Forest memiliki False Positive dan False Negative yang lebih kecil dibandingkan dengan model XGBoost
+Hasil dari metrik ini menunjukkan model Random Forest memiliki False Positive dan False Negative yang lebih kecil dibandingkan dengan model XGBoost.
 
 ![rf](images/conf_matrix2.png)
-Correlation matrix model Random Forest
+Correlation matrix model Random Forest.
 
 ![rf](images/conf_matrix.png)
-Correlation matrix model XGBoost
+Correlation matrix model XGBoost.
+
+## Conclusion
+- Sensor yang paling berdampak pada prediksi adalah sensor_0 sampai dengan sensor_12.
+- Model dengan akurasi yang paling baik berdasarkan kode dalam repository ini adalah RandomForest.
 
