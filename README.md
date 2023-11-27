@@ -16,7 +16,7 @@ Berdasarkan latar belakang, berikut adalah rumusan masalah yang diangkat.
 
 Untuk menjawab pertanyaan di atas, diperlukan goals sebagai berikut.
 - Melakukan analisis korelasi pada sensor terhadap dengan status sistem.
-- Membandingkan model SVM, Random Forest, dan XGBoost.
+- Membandingkan model Random Forest dan XGBoost.
 
     ### Solution statements
     - Menggunakan dua model klasifikasi yaitu dengan menggunakan: 
@@ -32,39 +32,67 @@ Data yang digunakan adalah data dari nilai raw oleh 52 sensor pada sistem pompa 
 - Sensor data (52 series): berisikan nilai raw dari sensor.
 - Machine status: berisikan status berjalan atau tidaknya sistem pada saat itu.
 
-**Rubrik/Kriteria Tambahan (Opsional)**:
-- Melakukan beberapa tahapan yang diperlukan untuk memahami data, contohnya teknik visualisasi data atau exploratory data analysis.
+### Exploratory Analysis
+Pada dataset terdapat banyak missing values pada kolom sensor dan terdapat satu kolom sensor yang bernilai nol pada setiap barisnya, dan masih banyak lagi hal-hal yang harus dibersihkan seperti:
+- Mendrop kolom yang tidak bergitu relevan dalam proses prediksi, kolom-kolom tersebut dapat dilihat dengan correlation matrix di bawah
+![correlation matrix](images/corr_matrix_zoomed.png)
+- Melakukan pengisian missing values dengan forward fill
+- Melakukan one hot encoding untuk keperluan training 
+- Melihat distribusi data pada label
+![grafik label](images/labels.png)
+Pada grafik tersebut dapat terlihat data untuk label NORMAL sangatlah banyak dan perlu dilakukan preprocessing agar distribusi antar label setara.
 
 ## Data Preparation
-Pada bagian ini Anda menerapkan dan menyebutkan teknik data preparation yang dilakukan. Teknik yang digunakan pada notebook dan laporan harus berurutan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan proses data preparation yang dilakukan
-- Menjelaskan alasan mengapa diperlukan tahapan data preparation tersebut.
+Pada bagian data preparation dilakukan beberapa metode preprocessing sebelum memasukan data training pada model seperti:
+- Melakukan PCA atau pereduksian dimensi pada fitur (sensor_0 - sensor terakhir pada data). Pada tahapan ini dilakukan pereduksian dimensi dengan jumlah komponen sebanyak dua. Pereduksian dimensi dilakukan karena data fitur sangat banyak yaitu bisa mencapai 14 fitur setelah dilakukan pengedropan kolom yang tidak begitu relevan.
+```python
+pca = PCA(n_components=2)
+pca.fit(encoded_df[pca_column])
+princ_comp = pca.transform(encoded_df[pca_column])
+princ_comp_df = pd.DataFrame(princ_comp, columns=["sensor_pca_1", "sensor_pca_2"])
+```
+- Setelah melakukan PCA, dilakukan pembagian dataset train dan test dengan perbandingan 80:20 menggunakan fungsi train_test_split dari sklearn. Pemilihan 80:20 dilakukan karena merupakan rasio standar dalam pembagian dataset.
+- Kemudian dilakukan juga Standarisasi dengan StandardScaler, alasan dilakukan standarisasi bukan normalisasi karena setiap fitur pada dataset mengandung besaran dan skala yang berbeda-beda.
+- Setelah itu dilakukan oversampling untuk menambah jumlah data pada label yang merupakan minoritas agar sama dengan minoritas jumlahnya (BROKEN status dan RECOVERING status), hal ini dilakukan agar akurasi prediksi dari model dapat meningkat karena tidak hanya terlatih pada satu label saja. Untuk melakukan oversampling digunakan fungsi resample() dari library sklearn
+```python
+oversampled_broken_class = resample(
+    broken,
+    replace=True,
+    n_samples=len(normal),
+    random_state=3
+)
+```
 
 ## Modeling
-Tahapan ini membahas mengenai model machine learning yang digunakan untuk menyelesaikan permasalahan. Anda perlu menjelaskan tahapan dan parameter yang digunakan pada proses pemodelan.
-
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan kelebihan dan kekurangan dari setiap algoritma yang digunakan.
-- Jika menggunakan satu algoritma pada solution statement, lakukan proses improvement terhadap model dengan hyperparameter tuning. **Jelaskan proses improvement yang dilakukan**.
-- Jika menggunakan dua atau lebih algoritma pada solution statement, maka pilih model terbaik sebagai solusi. **Jelaskan mengapa memilih model tersebut sebagai model terbaik**.
+Pada tahapan modeling, digunakan dua jenis model yaitu Random Forest Classifier dan XGBoost Classifier.
+- Pada saat training, model XGBoost memiliki waktu training yang jauh lebih cepat (10,7 s) daripada waktu training dari model Random Forest (1 menit lebih)
+- Dari kedua algoritma ini hasil prediksi (dengan jumlah tree dan max depth yang sama), algoritma Random Forest memiliki tingkat kesalahan prediksi yang lebih kecil daripada XGBoost walaupun waktu trainingnya jauh lebih lama.
 
 ## Evaluation
-Pada bagian ini anda perlu menyebutkan metrik evaluasi yang digunakan. Lalu anda perlu menjelaskan hasil proyek berdasarkan metrik evaluasi yang digunakan.
+Untuk tahap evaluasi digunakan metrik confusion matrix yang cocok digunakan pada kasus klasifikasi. Confusion matrix sendiri merupakan matriks yang terdiri dari jumlah false positive, false negative, true positive, dan true negative. 
 
-Sebagai contoh, Anda memiih kasus klasifikasi dan menggunakan metrik **akurasi, precision, recall, dan F1 score**. Jelaskan mengenai beberapa hal berikut:
-- Penjelasan mengenai metrik yang digunakan
-- Menjelaskan hasil proyek berdasarkan metrik evaluasi
+- True Positive (TP): Jumlah instansi yang diprediksi dengan benar sebagai positif.
+- False Positive (FP): Jumlah instansi yang diprediksi sebagai positif padahal sebenarnya negatif.
+- False Negative (FN): Jumlah instansi yang diprediksi sebagai negatif padahal sebenarnya positif.
+- True Negative (TN): Jumlah instansi yang diprediksi dengan benar sebagai negatif.
 
-Ingatlah, metrik evaluasi yang digunakan harus sesuai dengan konteks data, problem statement, dan solusi yang diinginkan.
+             Actual Positive     Actual Negative
+Predicted Positive    TP (True Positive)    FP (False Positive)
+Predicted Negative    FN (False Negative)   TN (True Negative)
 
-**Rubrik/Kriteria Tambahan (Opsional)**: 
-- Menjelaskan formula metrik dan bagaimana metrik tersebut bekerja.
+- Accuracy: (TP + TN) / (TP + FP + FN + TN)
+- Precision: TP / (TP + FP)
+- Recall (Sensitivity or True Positive Rate): TP / (TP + FN)
+- Specificity (True Negative Rate): TN / (TN + FP)
+- F1 Score: 2 * (Precision * Recall) / (Precision + Recall)
 
-**---Ini adalah bagian akhir laporan---**
+Akurasi mengukur tingkat kebenaran keseluruhan dari model, sementara presisi menilai proporsi identifikasi positif yang sebenarnya benar. Recall mengindikasikan proporsi positif sebenarnya yang diidentifikasi dengan benar, dan spesifisitas mencerminkan proporsi negatif sebenarnya yang diidentifikasi secara akurat. Metrik-metrik ini memberikan gambaran komprehensif tentang performa sebuah pengklasifikasi dalam memahami seberapa baik model dapat membedakan antara kelas positif dan negatif.
 
-_Catatan:_
-- _Anda dapat menambahkan gambar, kode, atau tabel ke dalam laporan jika diperlukan. Temukan caranya pada contoh dokumen markdown di situs editor [Dillinger](https://dillinger.io/), [Github Guides: Mastering markdown](https://guides.github.com/features/mastering-markdown/), atau sumber lain di internet. Semangat!_
-- Jika terdapat penjelasan yang harus menyertakan code snippet, tuliskan dengan sewajarnya. Tidak perlu menuliskan keseluruhan kode project, cukup bagian yang ingin dijelaskan saja.
+Hasil dari metrik ini menunjukkan model Random Forest memiliki False Positive dan False Negative yang lebih kecil dibandingkan dengan model XGBoost
+
+![rf](images/conf_matrix2.png)
+Correlation matrix model Random Forest
+
+![rf](images/conf_matrix.png)
+Correlation matrix model XGBoost
 
