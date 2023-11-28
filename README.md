@@ -152,7 +152,7 @@ Dapat dilihat pada tabel sebelumnya terdapat banyak kolom yang jumlah valuenya t
 | sensor_51        | 204937         | float64 |
 | machine_status   | 220320         | object  |
 
-Kemudian kita akan melakukan perhitungan jumlah missing values pada setiap kolom dan didapatkan hasil seperti tabel di bawah.
+Kemudian akan melakukan perhitungan jumlah missing values pada setiap kolom dan didapatkan hasil seperti tabel di bawah.
 
 | Kolom       | Missing Value |
 |-----------------|-------|
@@ -212,7 +212,7 @@ Selanjutnya dilakukan analisis korelasi untuk melihat sensor mana yang memiliki 
 ![correlation matrix](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/corr_matrix_zoomed.png)
 Dapat dilihat dari correlation matrix tersebut, terlihat sensor yang memberi efek signifikan terhadap ketiga status adalah sensor_0 sampai dengan sensor_12 dan untuk status broken terlihat sensor yang paling berdampak adalah sensor_44 sampai sensor 51.
 
-Kemudian kita akan melihat distribusi data label untuk menentukan apakah perlu dilakukan oversampling atau undersampling pada data training sebelum melakukan proses pelatihan model.
+Kemudian akan dilihat distribusi data label untuk menentukan apakah perlu dilakukan oversampling atau undersampling pada data training sebelum melakukan proses pelatihan model.
 ![grafik label](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/labels.png)
 Pada grafik tersebut dapat terlihat data untuk label NORMAL sangatlah banyak sehingga perlu dilakukan teknik resampling agar distribusi label menjadi rata atau jumlah data pada setiap class menjadi sama.
 
@@ -258,7 +258,7 @@ Beginilah hasilnya setelah dilakukan forward fill dan juga one hot encoding pada
 | machine_status_RECOVERING   | 220320         | uint8   |
 
 - **Pereduksian dimensi dengan PCA**
-    - Melakukan PCA atau pereduksian dimensi pada fitur (sensor_0 - sensor terakhir pada data). Pada tahapan ini dilakukan pereduksian dimensi dengan jumlah komponen sebanyak dua. Pereduksian dimensi dilakukan karena data fitur sangat banyak yaitu bisa mencapai 14 fitur setelah dilakukan pengedropan kolom yang tidak begitu relevan. Pada data ini, kita hanya menggunakan 2 PC saja karena informasi-informasi yang paling relevan terdapat pada komponen pertama dan kedua saja
+    - Melakukan PCA atau pereduksian dimensi pada fitur (sensor_0 - sensor terakhir pada data). Pada tahapan ini dilakukan pereduksian dimensi dengan jumlah komponen sebanyak dua. Pereduksian dimensi dilakukan karena data fitur sangat banyak yaitu bisa mencapai 14 fitur setelah dilakukan pengedropan kolom yang tidak begitu relevan. Pada data ini, hanya digunakan 2 PC saja karena informasi-informasi yang paling relevan terdapat pada komponen pertama dan kedua saja
 
 Berikut adalah data hasil PCA
 |   Column       | Non-Null Count | Dtype   |
@@ -276,7 +276,7 @@ Total # of sample in test dataset: 44064
 - **Standarisasi**
     - Kemudian dilakukan juga Standarisasi dengan StandardScaler, alasan dilakukan standarisasi bukan normalisasi karena setiap fitur pada dataset mengandung besaran dan skala yang berbeda-beda.
 - **Oversampling**
-    - Setelah itu dilakukan oversampling untuk menambah jumlah data pada label yang merupakan minoritas agar sama dengan minoritas jumlahnya (BROKEN status dan RECOVERING status), hal ini dilakukan agar akurasi prediksi dari model dapat meningkat karena tidak hanya terlatih pada satu label saja. Untuk melakukan oversampling digunakan fungsi resample() dari library sklearn. Dapat dilihat pada tabel distribusi di bawah, label yang paling banyak adalah machine dengan status NORMAL. Untuk menyetarakan distribusinya, kita perlu melakukan proses oversampling pada status RECOVERING dan BROKEN. Kita tidak melakukan undersampling agar tidak mengurangi jumlah data yang ada, menurut saya undersampling baik digunakan apabila baris pada dataset berjumlah sekitar satu juta.
+    - Setelah itu dilakukan oversampling untuk menambah jumlah data pada label yang merupakan minoritas agar sama dengan minoritas jumlahnya (BROKEN status dan RECOVERING status), hal ini dilakukan agar akurasi prediksi dari model dapat meningkat karena tidak hanya terlatih pada satu label saja. Untuk melakukan oversampling digunakan fungsi resample() dari library sklearn. Dapat dilihat pada tabel distribusi di bawah, label yang paling banyak adalah machine dengan status NORMAL. Untuk menyetarakan distribusinya, dilakukan proses oversampling pada status RECOVERING dan BROKEN. Undersampling tidak dilakukan agar tidak mengurangi jumlah data yang ada, undersampling baik digunakan apabila baris pada dataset berjumlah sekitar satu juta.
 
 Beginilah distribusi dari label pada dataset
 |   Status    | Jumlah | Persentase   |
@@ -315,7 +315,7 @@ Parameter yang sama digunakan juga untuk model XGBoost
 n_estimators=150
 max_depth=20
 ```
-Di sini saya ingin membandingkan performa dari model hasil bagging dan model hasil boosting (khususnya gradient boosting). Alasan saya memilih kedua model tersebut karena model-model tersebut merupakan penggabungan dari model-model seperti decision tree sehingga performa dan kecepatan yang tinggi dalam melakukan prediksi. Selain itu juga, kedua model tersebut tidak dapat mengatasi masalah imbalanced class seperti yang dialami pada dataset yang dipakai sekarang ini. 
+Di tahap ini, akan dibandingkan performa dari model hasil bagging dan model hasil boosting (khususnya gradient boosting). Alasan dipilihnya kedua model tersebut karena model-model tersebut merupakan penggabungan dari model-model seperti decision tree sehingga performa dan kecepatan yang tinggi dalam melakukan prediksi. Selain itu juga, kedua model tersebut tidak dapat mengatasi masalah imbalanced class seperti yang dialami pada dataset yang dipakai sekarang ini. 
 
 Pada saat training, model XGBoost memiliki waktu training yang jauh lebih cepat (10,7 s) daripada waktu training dari model Random Forest (1 menit lebih). Dari kedua algoritma ini hasil prediksi (dengan jumlah tree dan max depth yang sama), algoritma Random Forest memiliki tingkat kesalahan prediksi yang lebih kecil daripada XGBoost walaupun waktu trainingnya jauh lebih lama.
 
