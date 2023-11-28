@@ -2,7 +2,7 @@
 
 ## Domain Proyek
 
-Nilai mentah dari 52 sensor yang dipasang di sistem pompa air, berjudul "pump_sensor_data", digunakan sebagai kumpulan data untuk proyek ini. Motivasi di balik proyek ini adalah untuk memastikan keandalan sistem pompa air di kota-kota kecil dengan mengatasi potensi kegagalan. Sangat penting bagi masyarakat untuk memiliki akses terhadap pasokan air yang stabil, yang pada gilirannya menekankan pentingnya menjaga keandalan sistem pompa air. Sistem pompa air yang rusak dapat menyebabkan gejolak yang signifikan, sehingga mengakibatkan terganggunya pasokan air yang dapat berdampak besar pada kehidupan sehari-hari. Untuk mencegah kejadian seperti itu, fokus inisiatif ini adalah memanfaatkan data yang diperoleh dari sensor-sensor tersebut untuk mengantisipasi potensi malfungsi sistem.
+Motivasi di balik proyek ini adalah untuk memastikan keandalan sistem pompa air di kota-kota kecil dengan mengatasi potensi kegagalan. Sangat penting bagi masyarakat untuk memiliki akses terhadap pasokan air yang stabil, yang pada gilirannya menekankan pentingnya menjaga keandalan sistem pompa air. Sistem pompa air yang rusak dapat menyebabkan gejolak yang signifikan, sehingga mengakibatkan terganggunya pasokan air yang dapat berdampak besar pada kehidupan sehari-hari. Untuk mencegah kejadian seperti itu, fokus inisiatif ini adalah memanfaatkan data yang diperoleh dari sensor-sensor tersebut untuk mengantisipasi potensi malfungsi sistem.
 
 Analisis data sensor dapat dilakukan untuk mengidentifikasi pola atau karakteristik khusus yang mungkin mengindikasikan kesalahan. Dengan pemahaman yang lebih baik mengenai kegagalan sistem, solusi dari proyek ini diharapkan dapat mendukung upaya pemeliharaan preventif dan meningkatkan keandalan sistem pompa air. Dengan kata lain, proyek ini bertujuan tidak hanya untuk merespon kesalahan yang sudah terjadi, tetapi juga  mencegahnya dengan merekam tanda atau pola yang dapat diidentifikasi melalui data sensor. Hal ini akan membantu  mengoptimalkan sistem pengelolaan dan pemeliharaan, meningkatkan efisiensi dan dengan demikian memberikan manfaat yang lebih besar bagi masyarakat yang menggunakan layanan  air tersebut.
 
@@ -31,7 +31,7 @@ Untuk menjawab pertanyaan di atas, diperlukan goals sebagai berikut.
 ## Data Understanding
 Data yang digunakan adalah data dari nilai raw oleh 52 sensor pada sistem pompa air di suatu kota kecil. [Pump Sensor Data](https://www.kaggle.com/datasets/nphantawee/pump-sensor-data/data).
 
-### Variabel-variabel pada Restaurant UCI dataset adalah sebagai berikut:
+### Variabel-variabel pada water pump sensor dataset adalah sebagai berikut:
 - Time stamp data: berisikan waktu saat data sensor diambil.
 - Sensor data (52 series): berisikan nilai raw dari sensor.
 - Machine status: berisikan status berjalan atau tidaknya sistem pada saat itu.
@@ -209,13 +209,11 @@ Kemudian akan melakukan perhitungan jumlah missing values pada setiap kolom dan 
 | machine_status  | 0     |
 
 Selanjutnya dilakukan analisis korelasi untuk melihat sensor mana yang memiliki "efek" yang signifikan dan mana yang tidak signifikan
-![corr_matrix_zoomed](https://github.com/rubyw177/sensor-status-classification/assets/65707484/0dff9d5f-fe97-427a-9447-0a5001f3cd20)
-
+![correlation matrix](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/corr_matrix_zoomed.png)
 Dapat dilihat dari correlation matrix tersebut, terlihat sensor yang memberi efek signifikan terhadap ketiga status adalah sensor_0 sampai dengan sensor_12 dan untuk status broken terlihat sensor yang paling berdampak adalah sensor_44 sampai sensor 51.
 
 Kemudian akan dilihat distribusi data label untuk menentukan apakah perlu dilakukan oversampling atau undersampling pada data training sebelum melakukan proses pelatihan model.
-![labels](https://github.com/rubyw177/sensor-status-classification/assets/65707484/754f8fa6-b712-472f-b5be-2211e6d34a83)
-
+![grafik label](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/labels.png)
 Pada grafik tersebut dapat terlihat data untuk label NORMAL sangatlah banyak sehingga perlu dilakukan teknik resampling agar distribusi label menjadi rata atau jumlah data pada setiap class menjadi sama.
 
 Berikut adalah tampilan pada dataset
@@ -278,7 +276,7 @@ Total # of sample in test dataset: 44064
 - **Standarisasi**
     - Kemudian dilakukan juga Standarisasi dengan StandardScaler, alasan dilakukan standarisasi bukan normalisasi karena setiap fitur pada dataset mengandung besaran dan skala yang berbeda-beda.
 - **Oversampling**
-    - Setelah itu dilakukan oversampling untuk menambah jumlah data pada label yang merupakan minoritas agar sama dengan minoritas jumlahnya (BROKEN status dan RECOVERING status), hal ini dilakukan agar akurasi prediksi dari model dapat meningkat karena tidak hanya terlatih pada satu label saja. Untuk melakukan oversampling digunakan fungsi resample() dari library sklearn. Dapat dilihat pada tabel distribusi di bawah, label yang paling banyak adalah machine dengan status NORMAL. Untuk menyetarakan distribusinya, dilakukan proses oversampling pada status RECOVERING dan BROKEN. Undersampling tidak dilakukan agar tidak mengurangi jumlah data yang ada, undersampling baik digunakan apabila baris pada dataset berjumlah sekitar satu juta.
+    - Setelah itu dilakukan oversampling untuk menambah jumlah data pada label yang merupakan minoritas agar sama dengan minoritas jumlahnya (BROKEN status dan RECOVERING status), hal ini dilakukan agar akurasi prediksi dari model dapat meningkat karena tidak hanya terlatih pada satu label saja. Untuk melakukan oversampling digunakan fungsi resample() dari library sklearn. Dapat dilihat pada tabel distribusi di bawah, label yang paling banyak adalah machine dengan status NORMAL. Untuk menyetarakan distribusinya, dilakukan proses oversampling pada status RECOVERING dan BROKEN. Undersampling tidak dilakukan agar tidak mengurangi jumlah data yang ada, ndersampling baik digunakan apabila baris pada dataset berjumlah sekitar satu juta.
 
 Beginilah distribusi dari label pada dataset
 |   Status    | Jumlah | Persentase   |
@@ -349,13 +347,11 @@ Akurasi mengukur tingkat kebenaran keseluruhan dari model, sementara presisi men
 
 Hasil dari metrik ini menunjukkan model Random Forest memiliki False Positive dan False Negative yang lebih kecil dibandingkan dengan model XGBoost. Dengan kata lain model Random Forest **lebih cenderung tidak memberikan sinyal palsu/false alarm** daripada model XGBoost. Oleh karena nilai dari FP dan FN yang kecil serta TN dan TF yang besar pada model Random Forest, metrik pada classification report seperti akurasi, presisi, recall, specificity, dan F1 score juga akan lebih baik dibandingkan dengan metrik classification report pada model XGBoost. Untuk kasus predictive maintainance pada water pump plant ini, diperlukan model yang memiliki FN dan FP yang serendah mungkin agar terhindar dari false alarm (false alarm dapat membuang resource dan waktu) serta TN dan TF yang tinggi agar dengan tepat dapat menghindari problem yang akan terjadi sehingga plant akan andal.
 
+![conf_matrix2](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/conf_matrix2.png)
 Correlation matrix model Random Forest.
-![conf_matrix2](https://github.com/rubyw177/sensor-status-classification/assets/65707484/be6111d7-2201-4069-ab11-1b6ddcf20bf4)
 
-
+![rf](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/conf_matrix.png)
 Correlation matrix model XGBoost.
-![conf_matrix](https://github.com/rubyw177/sensor-status-classification/assets/65707484/29fbb1c0-197e-411c-b271-f2c3ec2ae7f4)
-
 
 ## Conclusion
 - Sensor yang paling berdampak pada prediksi adalah sensor_0 sampai dengan sensor_12.
