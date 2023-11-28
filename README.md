@@ -209,11 +209,11 @@ Kemudian akan melakukan perhitungan jumlah missing values pada setiap kolom dan 
 | machine_status  | 0     |
 
 Selanjutnya dilakukan analisis korelasi untuk melihat sensor mana yang memiliki "efek" yang signifikan dan mana yang tidak signifikan
-![correlation matrix](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/corr_matrix_zoomed.png)
+![corr_matrix_zoomed](https://github.com/rubyw177/sensor-status-classification/assets/65707484/19f43fd4-d369-4449-9d08-dd07b16a236a)
 Dapat dilihat dari correlation matrix tersebut, terlihat sensor yang memberi efek signifikan terhadap ketiga status adalah sensor_0 sampai dengan sensor_12 dan untuk status broken terlihat sensor yang paling berdampak adalah sensor_44 sampai sensor 51.
 
 Kemudian akan dilihat distribusi data label untuk menentukan apakah perlu dilakukan oversampling atau undersampling pada data training sebelum melakukan proses pelatihan model.
-![grafik label](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/labels.png)
+![labels](https://github.com/rubyw177/sensor-status-classification/assets/65707484/2c2782c1-d7b8-435a-8843-e3a26404e34a)
 Pada grafik tersebut dapat terlihat data untuk label NORMAL sangatlah banyak sehingga perlu dilakukan teknik resampling agar distribusi label menjadi rata atau jumlah data pada setiap class menjadi sama.
 
 Berikut adalah tampilan pada dataset
@@ -347,10 +347,10 @@ Akurasi mengukur tingkat kebenaran keseluruhan dari model, sementara presisi men
 
 Hasil dari metrik ini menunjukkan model Random Forest memiliki False Positive dan False Negative yang lebih kecil dibandingkan dengan model XGBoost. Dengan kata lain model Random Forest **lebih cenderung tidak memberikan sinyal palsu/false alarm** daripada model XGBoost. Oleh karena nilai dari FP dan FN yang kecil serta TN dan TF yang besar pada model Random Forest, metrik pada classification report seperti akurasi, presisi, recall, specificity, dan F1 score juga akan lebih baik dibandingkan dengan metrik classification report pada model XGBoost. Untuk kasus predictive maintainance pada water pump plant ini, diperlukan model yang memiliki FN dan FP yang serendah mungkin agar terhindar dari false alarm (false alarm dapat membuang resource dan waktu) serta TN dan TF yang tinggi agar dengan tepat dapat menghindari problem yang akan terjadi sehingga plant akan andal.
 
-![conf_matrix2](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/conf_matrix2.png)
+![conf_matrix2](https://github.com/rubyw177/sensor-status-classification/assets/65707484/65bf849f-c2cc-45a9-a1b4-70efadede7b1)
 Correlation matrix model Random Forest.
 
-![rf](https://github.com/rubyw177/sensor-status-classification/blob/9cfb1dc4a003ba1eba047f8420e530f97eedf8de/images/conf_matrix.png)
+![conf_matrix](https://github.com/rubyw177/sensor-status-classification/assets/65707484/bfd6228d-c2b1-472a-b4d0-ab6b06d6788e)
 Correlation matrix model XGBoost.
 
 ## Conclusion
