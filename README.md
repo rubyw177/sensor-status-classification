@@ -40,7 +40,8 @@ This project focuses on the **classification of water pump system failures** usi
    - **Most relevant sensors**: `sensor_0 - sensor_12` for general failure prediction.
    - **Critical sensors for broken systems**: `sensor_44 - sensor_51`.
 
-   ![Correlation Heatmap](images/correlation_heatmap.png)
+   **Zoomed Correlation Matrix**
+   ![Zoomed Correlation Matrix](images/corr_matrix_zoomed.png)
 
 2. **Class Distribution Before Resampling**
    - The dataset is highly **imbalanced**, requiring **oversampling** to balance class distribution.
@@ -90,9 +91,6 @@ model_xgb = XGBClassifier(n_estimators=150, max_depth=20, learning_rate=0.1, ran
 
 2. **XGBoost Confusion Matrix**
    ![XGBoost Confusion Matrix](images/conf_matrix2.png)
-
-3. **Zoomed Correlation Matrix for Better Analysis**
-   ![Zoomed Correlation Matrix](images/corr_matrix_zoomed.png)
 
 ---
 ## Repository Structure
