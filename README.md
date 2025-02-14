@@ -1,81 +1,82 @@
-# Machine Learning Project Report - William Kester Hermawan
+# Sensor Status Classification - Machine Learning Project
 
-## Project Domain
+## Project Overview
+This project focuses on the **classification of water pump system failures** using **sensor data** and **machine learning models**. The goal is to predict **system malfunctions** before they occur, enabling **preventive maintenance** to avoid costly downtimes. The dataset consists of readings from **52 sensors** monitoring a water pump system.
 
-The motivation behind this project is to ensure the reliability of water pump systems in small cities by addressing potential failures. It is essential for communities to have stable water supplies, which underscores the importance of maintaining the reliability of water pump systems. A malfunctioning pump system can cause significant disruptions, leading to water supply interruptions that can have a substantial impact on daily life. To prevent such occurrences, this initiative focuses on leveraging sensor data to anticipate potential system malfunctions.
+### Key Objectives:
+- Identify the **most significant sensors** affecting system failures.
+- Develop **high-accuracy predictive models** for **system failure detection**.
+- Compare the performance of **Random Forest** and **XGBoost** classifiers.
+- Use **visualizations** to interpret the results and model performance.
 
-Analyzing sensor data can help identify patterns or specific characteristics that may indicate failures. With a better understanding of system failures, this project aims to support preventive maintenance efforts and improve the reliability of water pump systems. In other words, this project is not just about responding to failures that have already occurred but also preventing them by identifying patterns or warning signs from sensor data. This will help optimize system management and maintenance, increase efficiency, and ultimately provide greater benefits to communities that rely on these water services.
-
+---
 ## Business Understanding
-
 ### Problem Statements
+1. **Which sensors have the most influence on system failures?**
+2. **Which machine learning model performs best in predicting system failures?**
 
-Based on the background, the following problem statements are addressed:
-- **Which sensors have the most significant impact on system failures?**
-  The project will investigate which sensors have the most influence on system failures in water pumps. This analysis will provide deeper insights into the variables most sensitive to abnormal system conditions.
-- **Which model has the highest accuracy in predicting system failures?**
-  This evaluation is crucial for selecting the most suitable and reliable algorithm to provide accurate predictions of system conditions. The results of this analysis are expected to offer valuable insights into efficient water pump system management and maintenance.
+### Solution Approach
+- **Data Preprocessing**: Handle missing values, balance dataset, and scale numerical features.
+- **Feature Selection**: Analyze **correlation matrices** to determine the most relevant sensors.
+- **Model Training**: Train and compare **Random Forest** and **XGBoost** models.
+- **Evaluation Metrics**: Assess models using **accuracy, precision, recall, and F1-score**.
 
-### Goals
-
-To answer the questions above, the following goals are set:
-- Conduct correlation analysis between sensors and system status to understand the relationship between each sensor and system conditions. This analysis will help identify the sensors that are strongly linked to system failures, providing valuable information for determining the most impactful features in model development. The results of this analysis will offer deeper insights into the contribution of each sensor to system operations.
-- Compare the performance of **Random Forest** and **XGBoost** in predictive modeling. By evaluating metrics such as accuracy, precision, recall, and F1-score, this project will assess the effectiveness and reliability of both models in predicting system failures. This analysis will not only determine which model yields the best results but also offer insights into the unique characteristics of each algorithm, enabling the selection of the most suitable model for the project.
-
-### Solution Statements
-
-- Implementing two classification models:
-  - **Random Forest Classifier**, an ensemble model of decision trees trained in parallel. Each tree makes its own classification, and the final prediction is determined through a majority vote.
-  - **XGBoost**, a gradient boosting model that sequentially creates a series of small decision trees (weak learners). In each iteration, XGBoost assigns more importance to previously misclassified data, improving performance gradually.
-- Using evaluation metrics such as **Confusion Matrix, Accuracy, Precision, Recall, and F1-score** on the test dataset. The confusion matrix is particularly useful for multi-class classification problems as it allows a more detailed analysis of model performance across different classes.
-
+---
 ## Data Understanding
+### Dataset Source
+- The dataset consists of water pump sensor readings over time.
+- Access the dataset: [Pump Sensor Data](https://www.kaggle.com/datasets/nphantawee/pump-sensor-data/data)
 
-The dataset used consists of raw values from **52 sensors** monitoring a water pump system in a small city. The dataset can be accessed from **[Pump Sensor Data](https://www.kaggle.com/datasets/nphantawee/pump-sensor-data/data)**.
+### Key Features:
+| Column          | Description  |
+|----------------|--------------|
+| `timestamp`   | Time of recorded sensor data |
+| `sensor_00` - `sensor_51` | Raw sensor readings |
+| `machine_status` | Operational status (NORMAL, BROKEN, RECOVERING) |
 
-### Variables in the Water Pump Sensor Dataset:
-- **Timestamp**: The time when the sensor data was recorded.
-- **Sensor Data (52 series)**: Raw values from each sensor.
-- **Machine Status**: The operational status of the system at the recorded time (running or not running).
+### **Exploratory Data Analysis**
+1. **Correlation Matrix Analysis**
+   - Identifies sensors most correlated with failures.
+   - **Most relevant sensors**: `sensor_0 - sensor_12` for general failure prediction.
+   - **Critical sensors for broken systems**: `sensor_44 - sensor_51`.
 
-### Exploratory Data Analysis
+   ![Correlation Heatmap](images/correlation_heatmap.png)
 
-| Column           | Non-Null Count | Dtype   |
-|-----------------|---------------|--------|
-| sensor_00       | 210112        | float64 |
-| sensor_01       | 219951        | float64 |
-| sensor_02       | 220301        | float64 |
-| sensor_03       | 220301        | float64 |
-| sensor_04       | 220301        | float64 |
-| sensor_05       | 220301        | float64 |
-| sensor_06       | 215522        | float64 |
-| sensor_07       | 214869        | float64 |
-| sensor_08       | 215213        | float64 |
-| sensor_09       | 215725        | float64 |
-| machine_status  | 220320        | object  |
+2. **Class Distribution Before Resampling**
+   - The dataset is highly **imbalanced**, requiring **oversampling** to balance class distribution.
+   ![Label Distribution](images/labels.png)
 
-A **correlation matrix** analysis indicates that sensors **sensor_0 to sensor_12** have the most significant effect on system failures, while **sensor_44 to sensor_51** are particularly important for predicting broken system status.
+---
+## Data Preprocessing
+### 1. Handling Missing Values
+- **Forward Fill** applied to missing values since data is time-series based.
 
-Further, **class distribution analysis** reveals an imbalance, with the majority of samples labeled as `NORMAL`. **Oversampling** is applied to ensure equal distribution among all classes before training the models.
+### 2. Feature Selection
+- Dropped irrelevant features with low correlation to failures.
 
-## Modeling
+### 3. Data Resampling
+- **Oversampling** was applied to minority classes to ensure balanced training.
 
-Two classification models are trained with the following hyperparameters:
-
-**Random Forest Classifier:**
+---
+## Model Development
+### **1. Random Forest Classifier**
+- **Ensemble of Decision Trees** trained in parallel.
+- Uses **majority voting** for final predictions.
 ```python
-n_estimators = 150
-max_depth = 20
+from sklearn.ensemble import RandomForestClassifier
+model_rf = RandomForestClassifier(n_estimators=150, max_depth=20, random_state=42)
 ```
 
-**XGBoost:**
+### **2. XGBoost Classifier**
+- **Boosting technique** that trains models sequentially, improving misclassified points at each iteration.
 ```python
-n_estimators = 150
-max_depth = 20
+from xgboost import XGBClassifier
+model_xgb = XGBClassifier(n_estimators=150, max_depth=20, learning_rate=0.1, random_state=42)
 ```
 
-## Evaluation
-
+---
+## Model Evaluation
+### **Performance Metrics**
 | Metric        | Formula  |
 |--------------|-----------------------------------------------------------|
 | **Accuracy** | (TP + TN) / (TP + FP + FN + TN) |
@@ -83,12 +84,58 @@ max_depth = 20
 | **Recall** | TP / (TP + FN) |
 | **F1 Score** | 2 * (Precision * Recall) / (Precision + Recall) |
 
-Results indicate that **Random Forest** outperforms XGBoost in terms of accuracy and misclassification rates. Specifically, **Random Forest produces fewer false alarms** (lower FP and FN rates) than XGBoost, making it a more reliable model for predictive maintenance in water pump systems.
+### **Confusion Matrix Comparisons**
+1. **Random Forest Confusion Matrix**
+   ![RF Confusion Matrix](images/conf_matrix.png)
 
-## Conclusion
+2. **XGBoost Confusion Matrix**
+   ![XGBoost Confusion Matrix](images/conf_matrix2.png)
 
-- **The most impactful sensors for prediction are sensor_0 to sensor_12.**
-- **The best-performing model in this study is Random Forest.**
-- **Random Forest is recommended for deployment due to its superior accuracy and reduced false alarms.**
+3. **Zoomed Correlation Matrix for Better Analysis**
+   ![Zoomed Correlation Matrix](images/corr_matrix_zoomed.png)
 
-This study demonstrates the effectiveness of predictive maintenance in water pump systems, providing a proactive approach to system reliability and efficiency.
+---
+## Repository Structure
+```
+📂 project_root/
+├── 📂 images/                         # Contains heatmaps & confusion matrices
+│   ├── correlation_heatmap.png       # Correlation heatmap of sensor readings
+│   ├── labels.png                    # Class distribution plot
+│   ├── conf_matrix.png               # Random Forest confusion matrix
+│   ├── conf_matrix2.png              # XGBoost confusion matrix
+│   ├── corr_matrix_zoomed.png        # Zoomed correlation matrix
+├── 📜 sensor_status_classification.ipynb  # Jupyter Notebook for model development
+├── 📜 sensor_status_classification.py    # Python script for classification
+├── 📜 README.md                          # Project documentation
+```
+
+---
+## Key Takeaways
+- **Most significant sensors**: `sensor_0 - sensor_12` and `sensor_44 - sensor_51`.
+- **Best-performing model**: **Random Forest**, as it minimizes false alarms.
+- **Future improvements**:
+  - Experimenting with **deep learning models**.
+  - Incorporating **real-time sensor streaming**.
+
+---
+## How to Replicate the Project
+### **1. Clone the Repository**
+```bash
+git clone <repository_url>
+cd sensor-status-classification
+```
+
+### **2. Install Dependencies**
+```bash
+pip install -r requirements.txt
+```
+
+### **3. Run Jupyter Notebook**
+```bash
+jupyter notebook sensor_status_classification.ipynb
+```
+
+### **4. Run Python Script for Classification**
+```bash
+python sensor_status_classification.py
+```
